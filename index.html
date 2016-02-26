@@ -8,16 +8,37 @@
 <body ng-app="starter">
 
 </body>
+<script src="underscore/underscore-min.js"></script>
 <script src="angular.min.js"></script>
 <script src="md5.min.js"></script>
 <script src="ae.js"></script>
 <script>
     angular.module('starter', ['ngApi']).run(function($ae){
-        $ae.init({mode:'STAGING'});
-        $ae.exec('api.foo.foo',{}).then(function(data){
+        $ae.init({mode:'DEV'});
+        /*
+        var o = new $ae.Object('gr_test');
+        o.set({name:'hhh'})
+        o.create().then(function(data){
             console.log(data);
-            alert(JSON.stringify(data));
+        }).catch(function(err){
+            console.log(err);
         });
+*/
+        var o = new $ae.Object('gr_test');
+        o.getById(64).then(function(data){
+            console.log(data);
+        }).catch(function(err){
+            console.log(err);
+        });
+
+        var o = new $ae.Query('gr_test');
+        o.first().then(function(data){
+            console.log(data);
+        }).catch(function(err){
+            console.log(err);
+        });
+
+
     });
 </script>
 </html>
