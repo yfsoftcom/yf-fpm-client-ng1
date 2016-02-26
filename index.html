@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+</head>
+<body ng-app="starter">
+
+</body>
+<script src="angular.min.js"></script>
+<script src="md5.min.js"></script>
+<script src="ae.js"></script>
+<script>
+    angular.module('starter', ['ngApi']).run(function($ae){
+        $ae.init({mode:'STAGING'});
+        $ae.exec('api.foo.foo',{}).then(function(data){
+            console.log(data);
+            alert(JSON.stringify(data));
+        });
+    });
+</script>
+</html>

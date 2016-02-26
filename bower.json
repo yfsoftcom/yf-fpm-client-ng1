@@ -1,0 +1,14 @@
+{
+  "name": "ngapi",
+  "version": "0.0.1",
+  "authors": [
+    "yfdever <yfsoftcom@sina.com>"
+  ],
+  "description": "",
+  "main": "ae.js",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "homepage": ""
+}
