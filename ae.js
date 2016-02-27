@@ -300,7 +300,7 @@
             return def.promise;
         };
 
-        var _Function = function(_f){
+        var _Function = function(f){
             this._f = f;
         };
 
