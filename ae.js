@@ -268,6 +268,16 @@
             var THIS = this;
             var arg = {table:this._t,condition:this._c};
             _exec('api.findAndCount',arg).then(function(data){
+                //将数据转换成列表
+                //TODO:check是否没有数据
+                var list = [];
+                if(!_.isEmpty(data)){
+                    _.each(data.rows,function(item){
+                        var o = new _Object(THIS._t,item);
+                        list.push(o);
+                    })
+                }
+                data.rows = list;
                 def.resolve(data);
             }).catch(function(err){
                 def.reject(err);
