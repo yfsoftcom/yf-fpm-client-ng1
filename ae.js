@@ -266,7 +266,7 @@
         _Query.prototype.findAndCount = function(){
             var def = $q.defer();
             var THIS = this;
-            var arg = {table:this._t,condition:this._c};
+            var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
             _exec('api.findAndCount',arg).then(function(data){
                 //将数据转换成列表
                 //TODO:check是否没有数据
