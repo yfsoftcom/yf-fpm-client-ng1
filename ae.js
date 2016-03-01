@@ -43,7 +43,7 @@
 
     };
     var config = {
-        DEV:'http://localhost:8080',
+        DEV:'http://192.168.1.223:8080',
         STAGING:'http://api.sandbox.guoran100.com',
         PRODUCT:'http://api.guoran100.com'
     };
@@ -263,6 +263,18 @@
             return def.promise;
         };
 
+        _Query.prototype.findAndCount = function(){
+            var def = $q.defer();
+            var THIS = this;
+            var arg = {table:this._t,condition:this._c};
+            _exec('api.findAndCount',arg).then(function(data){
+                def.resolve(data);
+            }).catch(function(err){
+                def.reject(err);
+            });
+            return def.promise;
+        };
+
         _Query.prototype.first = function(){
             var def = $q.defer();
             var THIS = this;
@@ -292,8 +304,18 @@
             var THIS = this;
             var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
             _exec('api.find',arg).then(function(data){
-                var o = new _Object(THIS._t,data);
-                def.resolve(o);
+                //将数据转换成列表
+                //TODO:check是否没有数据
+                console.log(data);
+                var list = [];
+                if(!_.isEmpty(data)){
+                    _.each(data,function(item){
+                        var o = new _Object(THIS._t,item);
+                        console.log(o);
+                        list.push(o);
+                    })
+                }
+                def.resolve(list);
             }).catch(function(err){
                 def.reject(err);
             });
