@@ -332,6 +332,18 @@
             return def.promise;
         };
 
+        _Query.prototype.clear = function(){
+            var def = $q.defer();
+            var THIS = this;
+            var arg = {table:this._t,condition:this._c};
+            _exec('api.clear',arg).then(function(data){
+                def.resolve(data);
+            }).catch(function(err){
+                def.reject(err);
+            });
+            return def.promise;
+        };
+
         var _Function = function(f){
             this._f = f;
         };
