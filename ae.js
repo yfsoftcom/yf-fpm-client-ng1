@@ -34,10 +34,14 @@
         ks = ks.sort();
         var strArgs = [];
         ks.forEach(function(item){
-            strArgs.push(item+'='+encodeURIComponent(args[item]));
+            var val = args[item];
+            if(_.isObject(val)){
+                val = JSON.stringify(val);
+            }
+            strArgs.push(item+'='+encodeURIComponent(val));
         });
         var content = strArgs.join('&');
-
+        console.log('before md5 content :' + content);
         var d = md5(content);
         return d;
 
