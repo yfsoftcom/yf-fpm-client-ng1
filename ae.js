@@ -51,21 +51,19 @@
     };
     angular.module('ngApi', []).factory('$ae', ['$q','$http', function ($q,$http) {
         var _options = {
-            mode:'DEV'
+            mode:'DEV',
+            appkey:'',
+            masterKey:''
         };
         var host = 'http://localhost:8080';
-        var appkey = '';
-        var masterKey = '';
 
         var _exec = function(action,args){
-            alert(appkey);
             var deferred = $q.defer();
             delete args['scope'];
-            var arr = {method:action,appkey:appkey,masterKey:masterKey,timestamp: _.now(),param:args};
+            var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args};
             var sign = signParams(arr);
             arr.sign = sign;
             delete arr.masterKey;
-            console.log(arr);
             $http.post(host + '/api',arr).success(function(data){
                 if(data.errno==0){
                     deferred.resolve(data.data);
@@ -372,8 +370,6 @@
                     _options[k] = options[k];
                 }
                 host = config[_options.mode];
-                appkey = _options[appkey];
-                masterKey = _options[masterKey];
             },
             Object:_Object,
 
