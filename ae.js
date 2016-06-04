@@ -47,22 +47,25 @@
 
     };
     var config = {
-        DEV:'http://192.168.1.223:8080',
-        STAGING:'http://api.sandbox.guoran100.com',
-        PRODUCT:'http://api.guoran100.com'
+        DEV:'http://localhost:8080',
+        STAGING:'http://61.147.98.134:8080',
+        PRODUCT:'http://api.guoran100.com:9001'
     };
     angular.module('ngApi', []).factory('$ae', ['$q','$http', function ($q,$http) {
         var _options = {
             mode:'DEV'
         };
         var host = 'http://localhost:8080';
+        var appkey = '';
+        var masterKey = '';
 
         var _exec = function(action,args){
             var deferred = $q.defer();
             delete args['scope'];
-            var arr = {method:action,appkey:'apiengine',timestamp:new Date().getTime(),param:args};
+            var arr = {method:action,appkey:appkey,masterKey:masterKey,timestamp: _.now(),param:args};
             var sign = signParams(arr);
             arr.sign = sign;
+            delete arr.masterKey;
             $http.post(host + '/api',arr).success(function(data){
                 if(data.errno==0){
                     deferred.resolve(data.data);
@@ -369,6 +372,8 @@
                     _options[k] = options[k];
                 }
                 host = config[_options.mode];
+                appkey = _options[appkey];
+                masterKey = _options[masterKey];
             },
             Object:_Object,
 

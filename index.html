@@ -14,14 +14,10 @@
 <script src="ae.js"></script>
 <script>
     angular.module('starter', ['ngApi']).run(function($ae){
-        $ae.init({mode:'DEV'});
+        $ae.init({mode:'DEV',appkey:'45883198abcdc106',masterKey:'1b7e5703602b6fce1cae7364ac0f2220'});
 
-        var query = new $ae.Query('nf_record');
-        //当前用户的消息
-        query.condition("alias = '"+ 50+"'");
-        //全局的通知消息
-        query.or("alias = 'ALL'");
-        query.sort('createAt-');
+        var query = new $ae.Query('api_webevent');
+        query.condition(" status > 0 ");
         query.find().then(function(list){
             console.log(list);
         }).catch(function(err){
@@ -37,6 +33,7 @@
             console.log(err);
         });
 */
+        /*
         var o = new $ae.Object('gr_test');
         o.getById(64).then(function(data){
             console.log(data);
@@ -51,7 +48,7 @@
             console.log(err);
         });
 
-
+//*/
     });
 </script>
 </html>
