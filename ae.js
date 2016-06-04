@@ -26,7 +26,6 @@
     };
 
     function signParams (args){
-        args['masterKey'] = '123';
         var ks = [];
         for(var k in args){
             ks.push(k);
@@ -41,7 +40,6 @@
             strArgs.push(item+'='+encodeURIComponent(val));
         });
         var content = strArgs.join('&');
-        console.log('before md5 content :' + content);
         var d = md5(content);
         return d;
 
@@ -60,12 +58,14 @@
         var masterKey = '';
 
         var _exec = function(action,args){
+            alert(appkey);
             var deferred = $q.defer();
             delete args['scope'];
             var arr = {method:action,appkey:appkey,masterKey:masterKey,timestamp: _.now(),param:args};
             var sign = signParams(arr);
             arr.sign = sign;
             delete arr.masterKey;
+            console.log(arr);
             $http.post(host + '/api',arr).success(function(data){
                 if(data.errno==0){
                     deferred.resolve(data.data);
