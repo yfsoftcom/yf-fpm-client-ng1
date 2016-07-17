@@ -1,6 +1,6 @@
 {
   "name": "aeapi",
-  "version": "0.0.2",
+  "version": "2.0.0",
   "authors": [
     "yfdever <yfsoftcom@sina.com>"
   ],
@@ -10,5 +10,13 @@
     "amd"
   ],
   "license": "MIT",
-  "homepage": ""
+  "homepage": "",
+  "ignore": [
+    ""
+  ],
+  "dependencies": {
+    "angular": "^1.5.7",
+    "underscore": "^1.8.3",
+    "js-md5": "md5#^0.4.1"
+  }
 }

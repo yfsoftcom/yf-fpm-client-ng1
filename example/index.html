@@ -8,18 +8,20 @@
 <body ng-app="starter">
 
 </body>
-<script src="underscore/underscore-min.js"></script>
-<script src="angular.min.js"></script>
-<script src="md5.min.js"></script>
-<script src="ae.js"></script>
+<script src="../bower_components/underscore/underscore-min.js"></script>
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../bower_components/js-md5/build/md5.min.js"></script>
+<script src="../ae.min.js"></script>
 <script>
     angular.module('starter', ['ngApi']).run(function($ae){
-        $ae.init({mode:'DEV',appkey:'45883198abcdc106',masterKey:'1b7e5703602b6fce1cae7364ac0f2220'});
+        $ae.init({mode:'PRODUCT',appkey:'45883198abcdc110',masterKey:'1b7e5703602b6fce1cae7364ac0f2249'});
 
         var query = new $ae.Query('api_webevent');
         query.condition(" status > 0 ");
         query.find().then(function(list){
-            console.log(list);
+            for(var l in list){
+                console.log(list[l]._d);
+            }
         }).catch(function(err){
             console.log(err);
         });
