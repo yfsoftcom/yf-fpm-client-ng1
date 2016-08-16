@@ -1,27 +1,16 @@
+"use strict";
+/**
+ * version:2.0.0
+ * author:yfsoftcom
+ * date:2016-07-17
+ */
 (function() {
-
     var E = {
         Object:{
             CREATE_ERROR:{errno:-1,code:'CREATE_ERROR',message:'create function should be called by a new object'},
             SAVE_ERROR:{errno:-2,code:'SAVE_ERROR',message:'save function should be called behind get or create'},
             REMOVE_ERROR:{errno:-3,code:'REMOVE_ERROR',message:'remove function should be called behind get or create'},
             OBJECT_ID_NOT_FIND:{errno:-4,code:'OBJECT_ID_NOT_FIND',message:'Object does not find by id or more rows'},
-        },
-        User:{
-            NOT_EXISTS:{errno:-11,code:'NOT_EXISTS',message:"login_name does't exists!"},
-            PASSWORD_ERROR:{errno:-12,code:'PASSWORD_ERROR',message:"password error!"},
-        },
-        System:{
-            SQL_INJECTION:{errno:-10000,code:'SQL_INJECTION',message:"login_name does't exists!"},
-            NO_POST_DATA:{errno:-9001,code:'NO_POST_DATA',message:"post data is empty!"},
-            PARAM_IS_NOT_JSON:{errno:-9005,code:"PARAM_IS_NOT_JSON",message:"Param is not json!"},
-            LOST_PARAM:function(col){ return {errno:-9000,code:'LOST_PARAM',message:"param: " + col + " required!"}},
-            TIMEZONE_OVER:{errno:-9002,code:'TIMEZONE_OVER',message:"your time zone not sync the server!"},
-            SIGN_ERROR:{errno:-9003,code:'SIGN_ERROR',message:"param sign error!"}
-        },
-        PayNotify:{
-            NO_RECORD:{errno:-21,code:'NO_RECORD',message:'No Record Find!'}
-
         }
     };
 
@@ -43,7 +32,7 @@
         var d = md5(content);
         return d;
 
-    };
+    }
     var config = {
         DEV:'http://localhost:8080',
         STAGING:'http://61.147.98.134:8080',
@@ -59,18 +48,17 @@
 
         var _exec = function(action,args){
             var deferred = $q.defer();
-            delete args['scope'];
+            delete args.scope;
             var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args};
             var sign = signParams(arr);
             arr.sign = sign;
             delete arr.masterKey;
             $http.post(host + '/api',arr).success(function(data){
-                if(data.errno==0){
+                if(data.errno === 0){
                     deferred.resolve(data.data);
                 }else{
                     deferred.reject(data);
                 }
-                deferred.resolve(data);
             }).error(function(err){
                 deferred.reject(err);
             });
@@ -136,7 +124,7 @@
         _Object.prototype.save = function(d){
             var def = $q.defer();
             //WARING:没有objectid的不允许进行保存
-            if(this.objectId == undefined){
+            if(this.objectId === undefined){
                 def.reject(E.Object.SAVE_ERROR);
                 return def.promise;
             }
@@ -146,7 +134,7 @@
             this._d.updateAt = new Date().getTime();
             var THIS = this;
             var arg = {table:this._t,condition:' id = '+this.objectId,row:this._d};
-            _exec('api.update',arg).then(function(data){
+            _exec('api.update',arg).then(function(){
                 def.resolve(THIS);
             }).catch(function(err){
                 def.reject(err);
@@ -157,12 +145,12 @@
         _Object.prototype.remove = function(){
             var def = $q.defer();
             //WARING:没有objectid的不允许进行删除
-            if(this.objectId == undefined){
+            if(this.objectId === undefined){
                 def.reject(E.Object.REMOVE_ERROR);
                 return def.promise;
             }
             var arg = {table:this._t,id:this.objectId};
-            _exec('api.remove',arg).then(function(data){
+            _exec('api.remove',arg).then(function(){
                 def.resolve(1);
             }).catch(function(err){
                 def.reject(err);
@@ -173,7 +161,7 @@
         _Object.prototype.create = function(d){
             var def = $q.defer();
             //WARING:有objectid的不允许进行重复的创建
-            if(this.objectId != undefined){
+            if(this.objectId !== undefined){
                 def.reject(E.Object.CREATE_ERROR);
                 return def.promise;
             }
@@ -258,7 +246,6 @@
 
         _Query.prototype.count = function(){
             var def = $q.defer();
-            var THIS = this;
             var arg = {table:this._t,condition:this._c};
             _exec('api.count',arg).then(function(data){
                 def.resolve(data);
@@ -295,16 +282,17 @@
             var THIS = this;
             var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
             _exec('api.first',arg).then(function(data){
+                var o;
                 //未搜索到数据的判断
                 if(_.isArray(data)){
-                    if(data.length == 0){
+                    if(data.length === 0){
                         //nodata
-                        var o = new _Object(THIS._t);
+                        o = new _Object(THIS._t);
                         def.resolve(o);
                     }
                 }else if(_.isObject(data)){
                     //找到了数据
-                    var o = new _Object(THIS._t,data);
+                    o = new _Object(THIS._t,data);
                     def.resolve(o);
                 }
 
@@ -320,13 +308,10 @@
             var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
             _exec('api.find',arg).then(function(data){
                 //将数据转换成列表
-                //TODO:check是否没有数据
-                console.log(data);
                 var list = [];
                 if(!_.isEmpty(data)){
                     _.each(data,function(item){
                         var o = new _Object(THIS._t,item);
-                        console.log(o);
                         list.push(o);
                     })
                 }
@@ -339,7 +324,6 @@
 
         _Query.prototype.clear = function(){
             var def = $q.defer();
-            var THIS = this;
             var arg = {table:this._t,condition:this._c};
             _exec('api.clear',arg).then(function(data){
                 def.resolve(data);

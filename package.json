@@ -1,0 +1,29 @@
+{
+  "name": "ngapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ae.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yfsoftcom/ngapi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yfsoftcom/ngapi/issues"
+  },
+  "homepage": "https://github.com/yfsoftcom/ngapi#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^2.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.4",
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3"
+  }
+}
