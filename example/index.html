@@ -11,10 +11,10 @@
 <script src="../bower_components/underscore/underscore-min.js"></script>
 <script src="../bower_components/angular/angular.min.js"></script>
 <script src="../bower_components/js-md5/build/md5.min.js"></script>
-<script src="../ae.min.js"></script>
+<script src="../ae.js"></script>
 <script>
     angular.module('starter', ['ngApi']).run(function($ae){
-        $ae.init({mode:'PRODUCT',appkey:'45883198abcdc110',masterKey:'1b7e5703602b6fce1cae7364ac0f2249'});
+        $ae.init({mode:'DEV',appkey:'609388a15b3dfaca',masterKey:'1292b2d414d45c8f97d44354de24c40c'});
 
         var query = new $ae.Query('api_webevent');
         query.condition(" status > 0 ");
@@ -22,6 +22,20 @@
             for(var l in list){
                 console.log(list[l]._d);
             }
+        }).catch(function(err){
+            console.log(err);
+        });
+
+        // var func = new $ae.Function('logistics.notify.getSystemBoardcast@0.0.2');
+        // func.invoke({}).then(function(result){
+        //     console.log(result);
+        // }).catch(function(err){
+        //     console.log(err);
+        // });
+
+        var func1 = new $ae.Function({action:'logistics.notify.getSystemBoardcast',v:'0.0.2'});
+        func1.invoke({}).then(function(result){
+            console.log(result);
         }).catch(function(err){
             console.log(err);
         });

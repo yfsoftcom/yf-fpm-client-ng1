@@ -42,14 +42,27 @@
         var _options = {
             mode:'DEV',
             appkey:'',
-            masterKey:''
+            masterKey:'',
+            v:'0.0.1'
         };
         var host = 'http://localhost:8080';
 
         var _exec = function(action,args){
             var deferred = $q.defer();
             delete args.scope;
-            var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args};
+            //这里如果 action 传入的是object 带有版本号，则需要进行转换
+            var v = _options.v;
+            if(_.isObject(action)){
+              v = action.v || v;
+              action = action.action;
+            }else if(_.isString(action)){
+              var pos = action.indexOf('@');
+              if(pos > 1){
+                v = action.substr(pos + 1);
+                action = action.substr(0,pos);
+              }
+            }
+            var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args,v:v};
             var sign = signParams(arr);
             arr.sign = sign;
             delete arr.masterKey;
