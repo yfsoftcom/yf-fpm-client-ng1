@@ -15,7 +15,15 @@
 <script>
     angular.module('starter', ['ngApi']).run(function($ae){
         $ae.init({mode:'DEV',appkey:'609388a15b3dfaca',masterKey:'1292b2d414d45c8f97d44354de24c40c'});
-
+        $ae.beforeHook(function(params){
+          console.log(params);
+          alert('before aaaa');
+          return true;
+        });
+        $ae.afterHook(function(params){
+          console.log(params);
+          alert('before bbbbbb');
+        });
         var query = new $ae.Query('api_webevent');
         query.condition(" status > 0 ");
         query.find().then(function(list){

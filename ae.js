@@ -11,6 +11,11 @@
             SAVE_ERROR:{errno:-2,code:'SAVE_ERROR',message:'save function should be called behind get or create'},
             REMOVE_ERROR:{errno:-3,code:'REMOVE_ERROR',message:'remove function should be called behind get or create'},
             OBJECT_ID_NOT_FIND:{errno:-4,code:'OBJECT_ID_NOT_FIND',message:'Object does not find by id or more rows'},
+        },
+        Hook:{
+          BEFORE_HOOK_REJECT:{errno:-301,code:'BEFORE_HOOK_REJECT',message:'before hook reject'},
+          AFTER_HOOK_REJECT:{errno:-302,code:'AFTER_HOOK_REJECT',message:'after hook reject'},
+          UNCATCH_HOOK_REJECT:{errno:-303,code:'UNCATCH_HOOK_REJECT',message:'uncatch exception:'}
         }
     };
 
@@ -34,7 +39,7 @@
 
     }
     var config = {
-        DEV:'http://localhost:8080',
+        DEV:'http://192.168.1.115:8080',
         STAGING:'http://61.147.98.134:8080',
         PRODUCT:'http://api.guoran100.com:9001'
     };
@@ -45,37 +50,74 @@
             masterKey:'',
             v:'0.0.1'
         };
-        var host = 'http://localhost:8080';
+        var host = 'http://192.168.1.115:8080';
+
+        var _beforeHook,_afterHook;
 
         var _exec = function(action,args){
-            var deferred = $q.defer();
-            delete args.scope;
-            //这里如果 action 传入的是object 带有版本号，则需要进行转换
-            var v = _options.v;
-            if(_.isObject(action)){
-              v = action.v || v;
-              action = action.action;
-            }else if(_.isString(action)){
-              var pos = action.indexOf('@');
-              if(pos > 1){
-                v = action.substr(pos + 1);
-                action = action.substr(0,pos);
+          var deferred = $q.defer();
+          //执行前置钩子
+          if(_beforeHook !== undefined){
+            if(_.isFunction(_beforeHook)){
+              try{
+                //被钩子拦截
+                if(! _beforeHook({action:action,args:args})){
+                  deferred.reject(E.Hook.BEFORE_HOOK_REJECT);
+                  return deferred.promise;
+                }
+              }catch(e){
+                //钩子执行错误，执行拦截
+                var error = _.clone(E.Hook.UNCATCH_HOOK_REJECT);
+                error.message = error.message + (e);
+                deferred.reject(error);
+                return deferred.promise;
               }
             }
-            var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args,v:v};
-            var sign = signParams(arr);
-            arr.sign = sign;
-            delete arr.masterKey;
-            $http.post(host + '/api',arr).success(function(data){
-                if(data.errno === 0){
-                    deferred.resolve(data.data);
-                }else{
-                    deferred.reject(data);
+          }
+
+          delete args.scope;
+          //这里如果 action 传入的是object 带有版本号，则需要进行转换
+          var v = _options.v;
+          if(_.isObject(action)){
+            v = action.v || v;
+            action = action.action;
+          }else if(_.isString(action)){
+            var pos = action.indexOf('@');
+            if(pos > 1){
+              v = action.substr(pos + 1);
+              action = action.substr(0,pos);
+            }
+          }
+          var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args,v:v};
+          var sign = signParams(arr);
+          arr.sign = sign;
+          delete arr.masterKey;
+
+          function afterCallback(result){
+            if(_afterHook !== undefined){
+              if(_.isFunction(_afterHook)){
+                try{
+                  _afterHook({action:action,args:args,result:result});
+                }catch(e){
+                  _afterHook({action:action,args:args,result:result,error:e});
                 }
-            }).error(function(err){
-                deferred.reject(err);
-            });
-            return deferred.promise;
+              }
+            }
+          }
+
+          $http.post(host + '/api',arr).success(function(data){
+              if(data.errno === 0){
+                  deferred.resolve(data.data);
+              }else{
+                  deferred.reject(data);
+              }
+              afterCallback(data);
+          }).error(function(err){
+              deferred.reject(err);
+              afterCallback(err);
+          });
+
+          return deferred.promise;
         };
 
         var _Object = function(t,d){
@@ -366,7 +408,13 @@
                 for(var k in options){
                     _options[k] = options[k];
                 }
-                host = config[_options.mode];
+                host = _options.host || config[_options.mode];
+            },
+            beforeHook: function(cb){
+              _beforeHook = cb;
+            },
+            afterHook: function(cb){
+              _afterHook = cb;
             },
             Object:_Object,
 
