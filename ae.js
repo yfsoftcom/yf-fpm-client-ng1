@@ -38,19 +38,15 @@
         return d;
 
     }
-    var config = {
-        DEV:'http://192.168.1.115:8080',
-        STAGING:'http://61.147.98.134:8080',
-        PRODUCT:'http://api.guoran100.com:9001'
-    };
     angular.module('ngApi', []).factory('$ae', ['$q','$http', function ($q,$http) {
         var _options = {
             mode:'DEV',
             appkey:'',
             masterKey:'',
-            v:'0.0.1'
+            v:'0.0.1',
+            endpoint:'http://localhost:8080/api'
         };
-        var host = 'http://192.168.1.115:8080';
+        var endpoint = _options.endpoint;
 
         var _beforeHook,_afterHook;
 
@@ -105,7 +101,7 @@
             }
           }
 
-          $http.post(host + '/api',arr).success(function(data){
+          $http.post(endpoint,arr).success(function(data){
               if(data.errno === 0){
                   deferred.resolve(data.data);
               }else{
@@ -408,7 +404,7 @@
                 for(var k in options){
                     _options[k] = options[k];
                 }
-                host = _options.host || config[_options.mode];
+                endpoint = _options.endpoint;
             },
             beforeHook: function(cb){
               _beforeHook = cb;
