@@ -3,7 +3,7 @@
 可以在angularjs应用中方便的使用yf-api-server的所有服务
 
 ### Example
-```
+```html
 <script src="../bower_components/underscore/underscore-min.js"></script>
 <script src="../bower_components/angular/angular.min.js"></script>
 <script src="../bower_components/js-md5/build/md5.min.js"></script>
@@ -48,14 +48,14 @@ $ bower install aeapi --save
 
 添加引用到页面中，依赖underscore 和 md5
 
-```
+```html
 <script src="../bower_components/underscore/underscore-min.js"></script>
 <script src="../bower_components/js-md5/build/md5.min.js"></script>
 <script src="../bower_components/ngapi/ae.min.js"></script>
 ```
 #### 2.2. 注入到angular应用中
 
-```
+```javascript
 angular.module('starter', ['ngApi'])
 ```
 
@@ -65,7 +65,7 @@ angular.module('starter', ['ngApi'])
 #### 3.1. 查询 query
 
 ##### 3.1.1 first
-```
+```javascript
 var o = new $ae.Query('gr_test');
 o.first().then(function(data){
     console.log(data);
@@ -75,7 +75,7 @@ o.first().then(function(data){
 ```
 
 ##### 3.1.2 getById
-```
+```javascript
 var o = new $ae.Object('gr_test');
 o.getById(64).then(function(data){
     console.log(data);
@@ -85,7 +85,7 @@ o.getById(64).then(function(data){
 ```
 
 ##### 3.1.3 find
-```
+```javascript
 var query = new $ae.Query('api_webevent');
 query.condition(" status > 0 ");
 query.find().then(function(list){
@@ -98,7 +98,7 @@ query.find().then(function(list){
 ```
 
 ##### 3.1.4 count
-```
+```javascript
 var query = new $ae.Query('api_webevent');
 query.condition(" status > 0 ");
 query.count().then(function(c){
@@ -109,7 +109,7 @@ query.count().then(function(c){
 ```
 
 ##### 3.1.5 findAndCount
-```
+```javascript
 var query = new $ae.Query('api_webevent');
 query.condition(" status > 0 ");
 query.findAndCount().then(function(data){
@@ -121,7 +121,7 @@ query.findAndCount().then(function(data){
 ```
 
 ##### 3.1.6 clear
-```
+```javascript
 var query = new $ae.Query('api_webevent');
 query.condition(" status > 0 ");
 query.clear().then(function(data){
@@ -133,7 +133,7 @@ query.clear().then(function(data){
 
 ---
 #### 3.2. 创建 create
-```
+```javascript
 var o = new $ae.Object('gr_test');
 o.set({name:'hhh'})
 o.create().then(function(data){
@@ -145,7 +145,7 @@ o.create().then(function(data){
 
 ---
 #### 3.3. 删除 remove
-```
+```javascript
 var o = new $ae.Object('gr_test');
 o.getById(64).then(function(data){
     o.remove().then(function(flag){
@@ -158,7 +158,7 @@ o.getById(64).then(function(data){
 
 ---
 #### 3.4. 更新 save
-```
+```javascript
 var o = new $ae.Object('gr_test');
 o.getById(64).then(function(data){
     o.set('val','test');
