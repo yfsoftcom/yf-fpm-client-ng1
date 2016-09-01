@@ -60,7 +60,10 @@ angular.module('starter', ['ngApi'])
 ```
 
 ### 3. 使用
-
+使用之前需要进行初始化的操作
+```javascript
+$ae.init({mode:'DEV',appkey:'609388a15b3dfaca',masterKey:'1292b2d414d45c8f97d44354de24c40c',endpoint:'http://localhost:8080/api'});
+```
 ---
 #### 3.1. 查询 query
 
