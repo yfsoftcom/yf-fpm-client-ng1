@@ -84,7 +84,7 @@
               action = action.substr(0,pos);
             }
           }
-          var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param:args,v:v};
+          var arr = {method:action,appkey:_options.appkey,masterKey:_options.masterKey,timestamp: _.now(),param: JSON.stringify(args),v:v};
           var sign = signParams(arr);
           arr.sign = sign;
           delete arr.masterKey;
@@ -100,7 +100,15 @@
               }
             }
           }
-          $http.post(endpoint,arr)
+          
+          $http({
+            url: endpoint,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+            data: arr
+          })
             .then(function(rsp){
               var data = rsp.data;
               if(data.errno === 0){
@@ -164,7 +172,7 @@
             this.objectId = id;
             var THIS = this;
             var arg = {table:this._t,id:id};
-            _exec('api.get',arg).then(function(data){
+            _exec('common.get',arg).then(function(data){
                 THIS._d = data;
                 def.resolve(THIS);
             }).catch(function(err){
@@ -186,7 +194,7 @@
             this._d.updateAt = new Date().getTime();
             var THIS = this;
             var arg = {table:this._t,condition:' id = '+this.objectId,row:this._d};
-            _exec('api.update',arg).then(function(){
+            _exec('common.update',arg).then(function(){
                 def.resolve(THIS);
             }).catch(function(err){
                 def.reject(err);
@@ -202,7 +210,7 @@
                 return def.promise;
             }
             var arg = {table:this._t,id:this.objectId};
-            _exec('api.remove',arg).then(function(){
+            _exec('common.remove',arg).then(function(){
                 def.resolve(1);
             }).catch(function(err){
                 def.reject(err);
@@ -224,7 +232,7 @@
             this._d.updateAt = this._d.createAt = new Date().getTime();
             var THIS = this;
             var arg = {table:this._t,row:this._d};
-            _exec('api.create',arg).then(function(data){
+            _exec('common.create',arg).then(function(data){
                 THIS.objectId = data.insertId;
                 THIS._d.id = THIS.objectId;
                 def.resolve(THIS);
@@ -299,7 +307,7 @@
         _Query.prototype.count = function(){
             var def = $q.defer();
             var arg = {table:this._t,condition:this._c};
-            _exec('api.count',arg).then(function(data){
+            _exec('common.count',arg).then(function(data){
                 def.resolve(data);
             }).catch(function(err){
                 def.reject(err);
@@ -311,7 +319,7 @@
             var def = $q.defer();
             var THIS = this;
             var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
-            _exec('api.findAndCount',arg).then(function(data){
+            _exec('common.findAndCount',arg).then(function(data){
                 //将数据转换成列表
                 //TODO:check是否没有数据
                 var list = [];
@@ -333,7 +341,7 @@
             var def = $q.defer();
             var THIS = this;
             var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
-            _exec('api.first',arg).then(function(data){
+            _exec('common.first',arg).then(function(data){
                 var o;
                 //未搜索到数据的判断
                 if(_.isArray(data)){
@@ -358,7 +366,7 @@
             var def = $q.defer();
             var THIS = this;
             var arg = {table:this._t,condition:this._c,sort:this._s,limit:this._l,skip:this._k,fields:this._f};
-            _exec('api.find',arg).then(function(data){
+            _exec('common.find',arg).then(function(data){
                 //将数据转换成列表
                 var list = [];
                 if(!_.isEmpty(data)){
@@ -377,7 +385,7 @@
         _Query.prototype.clear = function(){
             var def = $q.defer();
             var arg = {table:this._t,condition:this._c};
-            _exec('api.clear',arg).then(function(data){
+            _exec('common.clear',arg).then(function(data){
                 def.resolve(data);
             }).catch(function(err){
                 def.reject(err);

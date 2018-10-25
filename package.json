@@ -1,6 +1,6 @@
 {
   "name": "yfpmc-ng1",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "An AngularJs1.x Client SDK For FPM-Server",
   "scripts": {
     "compile": "./node_modules/.bin/gulp",
