@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+</head>
+<body ng-app="starter">
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
+<script src="../dist/md5.min.js"></script>
+<script src="../src/index.js"></script>
+<script>
+    angular.module('starter', ['ngFpmc']).run(function($ngFpmc){
+        $ngFpmc.init({ endpoint: 'http://api.yunplus.io/api', mode:'DEV',appkey:'123123',masterKey:'123123'});
+        $ngFpmc.beforeHook(function(params){
+          console.log(params);
+          alert('before aaaa');
+          return true;
+        });
+        $ngFpmc.afterHook(function(params){
+          console.log(params);
+          alert('before bbbbbb');
+        });
+        var query = new $ngFpmc.Query('api_webevent');
+        query.condition(" status > 0 ");
+        query.find().then(function(list){
+            for(var l in list){
+                console.log(list[l]._d);
+            }
+        }).catch(function(err){
+            console.log(err);
+        });
+        // var func = new $ngFpmc.Function('logistics.notify.getSystemBoardcast@0.0.2');
+        // func.invoke({}).then(function(result){
+        //     console.log(result);
+        // }).catch(function(err){
+        //     console.log(err);
+        // });
+        var func1 = new $ngFpmc.Function({action:'logistics.notify.getSystemBoardcast',v:'0.0.2'});
+        func1.invoke({}).then(function(result){
+            console.log(result);
+        }).catch(function(err){
+            console.log(err);
+        });
+        /*
+        var o = new $ngFpmc.Object('gr_test');
+        o.set({name:'hhh'})
+        o.create().then(function(data){
+            console.log(data);
+        }).catch(function(err){
+            console.log(err);
+        });
+*/
+        /*
+        var o = new $ngFpmc.Object('gr_test');
+        o.getById(64).then(function(data){
+            console.log(data);
+        }).catch(function(err){
+            console.log(err);
+        });
+        var o = new $ngFpmc.Query('gr_test');
+        o.first().then(function(data){
+            console.log(data);
+        }).catch(function(err){
+            console.log(err);
+        });
+//*/
+    });
+</script>
+</html>
