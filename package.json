@@ -1,13 +1,11 @@
 {
-  "name": "yf-fpm-client-ng1",
+  "name": "ypmc-ng1",
   "version": "1.0.0",
   "description": "An AngularJs1.x Client SDK For FPM-Server",
-  "main": "lib/index.js",
   "scripts": {
     "compile": "./node_modules/.bin/gulp",
     "prepublishOnly": "npm run compile",
-    "client": "./node_modules/.bin/http-server . -d False -s --cors -c-1 -p 8088",
-    "test": "./node_modules/.bin/mocha test/*.test.js"
+    "client": "./node_modules/.bin/http-server . -d False -s --cors -c-1 -p 8088"
   },
   "keywords": [
     "fpm",
@@ -25,12 +23,9 @@
     "gulp-uglify": "^1.5.4",
     "jshint": "^2.9.2",
     "lodash": "^4.17.4",
-    "md5": "^2.2.1",
-    "mocha": "^3.2.0"
+    "http-server": "^0.11.1",
+    "js-md5": "^0.7.3"
   },
   "dependencies": {
-    "http-server": "^0.11.1",
-    "js-md5": "^0.7.3",
-    "md5.js": "^1.3.5"
   }
 }
