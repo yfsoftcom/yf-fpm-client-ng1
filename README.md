@@ -3,9 +3,9 @@
 # install
 
 ```bash
-$ npm i yf-fpm-client-ng1 --save
+$ npm i yfpmc-ng1 --save
 // or yarn
-$ yarn add yf-fpm-client-ng1
+$ yarn add yfpmc-ng1
 ```
 
 # use
