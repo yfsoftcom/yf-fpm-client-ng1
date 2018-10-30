@@ -4,8 +4,6 @@
 
 ```bash
 $ npm i yfpmc-ng1 --save
-// or yarn
-$ yarn add yfpmc-ng1
 ```
 
 # use

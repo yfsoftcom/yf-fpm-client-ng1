@@ -290,13 +290,13 @@
             if(_.isString(f)){
                 f = f.split(',');
             }
-            if(!_.contains(f,'id')){
+            if(!_.has(f,'id')){
                 f.push('id');
             }
-            if(!_.contains(f,'createAt')){
+            if(!_.has(f,'createAt')){
                 f.push('createAt');
             }
-            if(!_.contains(f,'updateAt')){
+            if(!_.has(f,'updateAt')){
                 f.push('updateAt');
             }
             f = f.join(',');

@@ -14,17 +14,18 @@
 <script src="../src/index.js"></script>
 <script>
     angular.module('starter', ['ngFpmc']).run(function($ngFpmc){
-        $ngFpmc.init({ endpoint: 'http://api.yunplus.io/api', mode:'DEV',appkey:'123123',masterKey:'123123'});
-        $ngFpmc.beforeHook(function(params){
-          console.log(params);
-          alert('before aaaa');
-          return true;
-        });
-        $ngFpmc.afterHook(function(params){
-          console.log(params);
-          alert('before bbbbbb');
-        });
-        var query = new $ngFpmc.Query('api_webevent');
+        $ngFpmc.init({ endpoint: 'http://api.yunplus.io/api', appkey:'123123',masterKey:'123123'});
+        // $ngFpmc.beforeHook(function(params){
+        //   console.log(params);
+        //   alert('before aaaa');
+        //   return true;
+        // });
+        // $ngFpmc.afterHook(function(params){
+        //   console.log(params);
+        //   alert('before bbbbbb');
+        // });
+        var query = new $ngFpmc.Query('api_app');
+        query.select('appname, apptype, about, appurl');
         query.condition(" status > 0 ");
         query.find().then(function(list){
             for(var l in list){
