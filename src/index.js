@@ -202,7 +202,8 @@
             return def.promise;
         };
 
-        _Object.prototype.remove = function(){
+        _Object.prototype.remove = function(id){
+            this.objectId = id || this.objectId;
             var def = $q.defer();
             //WARING:没有objectid的不允许进行删除
             if(this.objectId === undefined){
